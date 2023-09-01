@@ -2,15 +2,22 @@ from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator, RegexValidator, MaxLengthValidator
 from django.db import models
 from django.db.models import CASCADE, SET_NULL, RESTRICT, DO_NOTHING
+from authemail.models import EmailUserManager, EmailAbstractUser
+
+
+class MyUser(EmailAbstractUser):
+    # Required
+    objects = EmailUserManager()
 
 
 # Create your models here.
 class UserType(models.Model):
-    user = models.ForeignKey(to=User, on_delete=CASCADE)
+    user = models.ForeignKey(to=MyUser, on_delete=CASCADE)
     type = models.CharField(max_length=8, null=True, blank=True, choices=(('Seller', 'Seller'), ('Buyer', 'Buyer')))
 
 
 class Location(models.Model):
+    user = models.ForeignKey(to=MyUser, on_delete=SET_NULL, null=True, blank=False)
     phone = models.CharField(validators=[RegexValidator("^0?[6-9]{1}\d{9}$")], max_length=15)
     address = models.TextField()
     landmark = models.CharField(max_length=45, null=True, blank=True)
@@ -21,18 +28,18 @@ class Location(models.Model):
 
 class BuyerProfile(models.Model):
     userType = models.OneToOneField(to=UserType, on_delete=CASCADE)
-    address = models.ForeignKey(null=True, blank=True, to=Location, on_delete=SET_NULL)
     gender = models.CharField(null=True, blank=True, max_length=6, choices=(('m', 'male'), ('f', 'female')))
+    address = models.ForeignKey(to=Location, on_delete=CASCADE)
 
 
 class SellerProfile(models.Model):
     userType = models.OneToOneField(to=UserType, on_delete=CASCADE)
     store = models.CharField(max_length=100, null=True, blank=True)
-    address = models.ForeignKey(null=True, blank=True, to=Location, on_delete=SET_NULL)
+    address = models.ForeignKey(to=Location, on_delete=CASCADE)
 
 
 class Review(models.Model):
-    user = models.ForeignKey(to=User, on_delete=CASCADE)
+    user = models.ForeignKey(to=MyUser, on_delete=CASCADE)
     rating = models.FloatField(validators=(MaxValueValidator(5), MinValueValidator(1)))
     comments = models.TextField()
 
@@ -51,7 +58,7 @@ class Product(models.Model):
 
 
 class Cart(models.Model):
-    user = models.OneToOneField(to=User, on_delete=CASCADE)
+    user = models.OneToOneField(to=MyUser, on_delete=CASCADE)
     product = models.ForeignKey(to=Product, on_delete=CASCADE)
     quantity = models.IntegerField(default=1)
     is_purchased = models.BooleanField(default=False)
@@ -66,5 +73,5 @@ class Order(models.Model):
 
 
 class OrderHistory(models.Model):
-    user = models.ForeignKey(to=User, on_delete=DO_NOTHING)
+    user = models.ForeignKey(to=MyUser, on_delete=DO_NOTHING)
     order = models.OneToOneField(to=Order, on_delete=DO_NOTHING)

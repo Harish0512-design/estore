@@ -35,10 +35,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'phone_field',
     'product',
     'rest_framework',
+    'rest_framework.authtoken',
+    'authemail',
 ]
+# for authentication
+AUTH_USER_MODEL = 'product.MyUser'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -121,3 +124,19 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    )
+}
+
+EMAIL_FROM = 'harishsomsole@gmail.com'
+EMAIL_BCC = 'collegecirculars123@gmail.com'
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'Harish'
+EMAIL_HOST_PASSWORD = 'Harish@python3'
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False

@@ -4,11 +4,31 @@ from rest_framework import serializers
 from product.models import Product, Review, Location, Cart, Order, OrderHistory, UserType
 
 
-class UserSerializer(serializers.HyperlinkedModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
+    def create(self, validated_data):
+        password = validated_data.pop('password')
+        user = User(**validated_data)
+        user.set_password(password)
+        user.save()
+        return user
+
+    def update(self, instance, validated_data):
+        password = validated_data.pop('password', None)
+        for k, v in validated_data:
+            setattr(instance, k, v)
+        if password:
+            instance.set_password(password)
+        instance.save()
+        return instance
 
     class Meta:
         model = User
         fields = "__all__"
+
+
+class PasswordChangeSerializer(serializers.Serializer):
+    new_password = serializers.CharField(min_length=4, required=True)
+    confirm_password = serializers.CharField(min_length=4, required=True)
 
 
 class ProductSerializer(serializers.HyperlinkedModelSerializer):
