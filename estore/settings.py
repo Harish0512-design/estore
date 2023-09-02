@@ -131,12 +131,11 @@ REST_FRAMEWORK = {
     )
 }
 
-EMAIL_FROM = 'harishsomsole@gmail.com'
-EMAIL_BCC = 'collegecirculars123@gmail.com'
-
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'Harish'
-EMAIL_HOST_PASSWORD = 'Harish@python3'
 EMAIL_USE_TLS = True
-EMAIL_USE_SSL = False
+EMAIL_HOST_USER = 'collegecirculars123@gmail.com'
+EMAIL_HOST_PASSWORD = 'gobu inso axnu aspb'
+EMAIL_FROM = 'collegecirculars123@gmail.com'
+EMAIL_BCC = 'harishsomsole@gmail.com'
