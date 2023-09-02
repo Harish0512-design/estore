@@ -1,7 +1,12 @@
-from django.contrib.auth.models import User
 from rest_framework import serializers
 
-from product.models import Product, Review, Location, Cart, Order, OrderHistory, UserType
+from product.models import *
+
+
+class MyUserSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = MyUser
+        fields = "__all__"
 
 
 class ProductSerializer(serializers.HyperlinkedModelSerializer):
@@ -16,7 +21,10 @@ class ReviewSerializer(serializers.HyperlinkedModelSerializer):
         fields = "__all__"
 
 
-class LocationSerializer(serializers.HyperlinkedModelSerializer):
+class LocationSerializer(serializers.ModelSerializer):
+    # user = serializers.HyperlinkedRelatedField(view_name='MyUserView', queryset=MyUser.objects.all(),
+    #                                            lookup_field='pk')
+
     class Meta:
         model = Location
         fields = "__all__"
@@ -37,10 +45,4 @@ class OrderSerializer(serializers.HyperlinkedModelSerializer):
 class OrderHistorySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = OrderHistory
-        fields = "__all__"
-
-
-class OrderTypeSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = UserType
         fields = "__all__"
