@@ -4,21 +4,22 @@ from django.db import models
 from django.db.models import CASCADE, SET_NULL, DO_NOTHING
 
 
+# Create your models here.
 class MyUser(EmailAbstractUser):
     # Required
     objects = EmailUserManager()
+    date_of_birth = models.DateField(null=True, blank=True)
 
-    # def __str__(self):
-    #     return self.first_name
+    def __str__(self):
+        return "%s - %s" % (self.first_name, self.email)
 
 
-# Create your models here.
-class UserType(models.Model):
-    user = models.ForeignKey(to=MyUser, on_delete=CASCADE)
-    type = models.CharField(max_length=8, null=True, blank=False, choices=(('Seller', 'Seller'), ('Buyer', 'Buyer')))
-
-    # def __str__(self):
-    #     return self.user
+# class UserType(models.Model):
+#     user = models.ForeignKey(to=MyUser, on_delete=CASCADE)
+#     type = models.CharField(max_length=8, null=True, blank=False, choices=(('Seller', 'Seller'), ('Buyer', 'Buyer')))
+#
+#     # def __str__(self):
+#     #     return self.user
 
 
 class Location(models.Model):
@@ -31,21 +32,19 @@ class Location(models.Model):
     state = models.CharField(max_length=45)
 
     def __str__(self):
-        return self.state
+        return "%s(%s, %s, %s - %s)" % (self.user, self.address, self.city, self.state, self.state)
 
 
-class BuyerProfile(models.Model):
-    userType = models.OneToOneField(to=UserType, on_delete=CASCADE)
-    gender = models.CharField(null=True, blank=True, max_length=6, choices=(('m', 'male'), ('f', 'female')))
-    address = models.ForeignKey(to=Location, on_delete=CASCADE, blank=True,null=True)
-
-
-
-class SellerProfile(models.Model):
-    userType = models.OneToOneField(to=UserType, on_delete=CASCADE)
-    store = models.CharField(max_length=100, null=True, blank=True)
-    address = models.ForeignKey(to=Location, on_delete=CASCADE,null=True,blank=True)
-
+# class BuyerProfile(models.Model):
+#     userType = models.OneToOneField(to=UserType, on_delete=CASCADE)
+#     gender = models.CharField(null=True, blank=True, max_length=6, choices=(('m', 'male'), ('f', 'female')))
+#     address = models.ForeignKey(to=Location, on_delete=CASCADE, blank=True, null=True)
+#
+#
+# class SellerProfile(models.Model):
+#     userType = models.OneToOneField(to=UserType, on_delete=CASCADE)
+#     store = models.CharField(max_length=100, null=True, blank=True)
+#     address = models.ForeignKey(to=Location, on_delete=CASCADE, null=True, blank=True)
 
 
 class Review(models.Model):
@@ -53,6 +52,8 @@ class Review(models.Model):
     rating = models.FloatField(validators=(MaxValueValidator(5), MinValueValidator(1)))
     comments = models.TextField()
 
+    def __str__(self):
+        return "%s - %s" % (self.user, self.rating)
 
 
 class Product(models.Model):
@@ -67,6 +68,8 @@ class Product(models.Model):
     rating = models.OneToOneField(to=Review, on_delete=CASCADE, null=True, blank=True)
     created_date = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return f"{self.name}(price : {self.price}, brand: {self.brand}, in-stock : {self.in_stock})"
 
 
 class Cart(models.Model):
@@ -75,6 +78,8 @@ class Cart(models.Model):
     quantity = models.IntegerField(default=1)
     is_purchased = models.BooleanField(default=False)
 
+    def __str__(self):
+        return "%s - %s - %s" % (self.product, self.quantity, self.is_purchased)
 
 
 class Order(models.Model):
@@ -85,9 +90,6 @@ class Order(models.Model):
     ordered_date = models.DateTimeField(auto_now_add=True)
 
 
-
 class OrderHistory(models.Model):
     user = models.ForeignKey(to=MyUser, on_delete=DO_NOTHING)
     order = models.OneToOneField(to=Order, on_delete=DO_NOTHING)
-
-
