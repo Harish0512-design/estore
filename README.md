@@ -131,7 +131,10 @@ Response Payload
 To reset Password use the endpoint http://127.0.0.1:8000/api/accounts/password/reset
 
 Request Payload
+<<<<<<< HEAD
 
+=======
+>>>>>>> 0b90fc02c936df97fc0742e622f2b66581bcb74a
 * POST
 
       {
@@ -172,7 +175,10 @@ When user clicks the link in the password reset email,
 call this endpoint to verify the password reset code.
 
 Request Payload
+<<<<<<< HEAD
 
+=======
+>>>>>>> 0b90fc02c936df97fc0742e622f2b66581bcb74a
 * GET
 
          {
@@ -204,7 +210,10 @@ Call this endpoint with the password reset code and the new password, to reset t
 http://127.0.0.1:8000/api/accounts/password/reset/verified
 
 Request Payload
+<<<<<<< HEAD
 
+=======
+>>>>>>> 0b90fc02c936df97fc0742e622f2b66581bcb74a
 * GET
 
         {
@@ -232,4 +241,8 @@ Responses
           "detail": "Unable to verify user."
       }
     
+<<<<<<< HEAD
     
+=======
+    
+>>>>>>> 0b90fc02c936df97fc0742e622f2b66581bcb74a
