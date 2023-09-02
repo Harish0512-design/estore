@@ -1,9 +1,9 @@
 from django.contrib import admin
 from django.contrib.admin import ModelAdmin
-
-from product.models import Product, Location, Review, UserType, Cart, Order, OrderHistory
+from product.models import *
 from django.contrib.auth import get_user_model
 from authemail.admin import EmailUserAdmin
+from rest_framework.authtoken.models import Token
 
 
 class MyUserAdmin(EmailUserAdmin):
@@ -36,3 +36,5 @@ admin.site.register(UserType)
 admin.site.register(Cart)
 admin.site.register(Order)
 admin.site.register(OrderHistory)
+admin.site.register(BuyerProfile)
+admin.site.register(SellerProfile)
