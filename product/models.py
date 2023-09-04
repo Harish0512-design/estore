@@ -1,7 +1,7 @@
 from authemail.models import EmailUserManager, EmailAbstractUser
 from django.core.validators import MaxValueValidator, MinValueValidator, RegexValidator
 from django.db import models
-from django.db.models import CASCADE, SET
+from django.db.models import CASCADE, PROTECT
 
 
 # Create your models here.
@@ -12,6 +12,14 @@ class MyUser(EmailAbstractUser):
 
     def __str__(self):
         return "%s - %s" % (self.first_name, self.email)
+
+
+# class UserType(models.Model):
+#     user = models.ForeignKey(to=MyUser, on_delete=CASCADE)
+#     type = models.CharField(max_length=8, null=True, blank=False, choices=(('Seller', 'Seller'), ('Buyer', 'Buyer')))
+#
+#     # def __str__(self):
+#     #     return self.user
 
 
 class Location(models.Model):
@@ -25,6 +33,27 @@ class Location(models.Model):
 
     def __str__(self):
         return "%s(%s, %s, %s - %s)" % (self.user, self.address, self.city, self.state, self.state)
+
+
+# class BuyerProfile(models.Model):
+#     userType = models.OneToOneField(to=UserType, on_delete=CASCADE)
+#     gender = models.CharField(null=True, blank=True, max_length=6, choices=(('m', 'male'), ('f', 'female')))
+#     address = models.ForeignKey(to=Location, on_delete=CASCADE, blank=True, null=True)
+#
+#
+# class SellerProfile(models.Model):
+#     userType = models.OneToOneField(to=UserType, on_delete=CASCADE)
+#     store = models.CharField(max_length=100, null=True, blank=True)
+#     address = models.ForeignKey(to=Location, on_delete=CASCADE, null=True, blank=True)
+
+
+class Review(models.Model):
+    user = models.ForeignKey(to=MyUser, on_delete=CASCADE)
+    rating = models.FloatField(validators=(MaxValueValidator(5), MinValueValidator(1)))
+    comments = models.TextField()
+
+    def __str__(self):
+        return "%s - %s" % (self.user, self.rating)
 
 
 class Product(models.Model):
@@ -73,3 +102,4 @@ class Order(models.Model):
 
 class OrderHistory(models.Model):
     order = models.JSONField()
+    user = models.ForeignKey(to=MyUser, on_delete=PROTECT)
