@@ -58,3 +58,6 @@ class OrderHistorySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = OrderHistory
         fields = "__all__"
+
+# class DeliveryAddressSerializer(serializers.Serializer):
+#     delivery_address = serializers.PrimaryKeyRelatedField()
