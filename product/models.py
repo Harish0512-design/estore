@@ -14,14 +14,6 @@ class MyUser(EmailAbstractUser):
         return "%s - %s" % (self.first_name, self.email)
 
 
-# class UserType(models.Model):
-#     user = models.ForeignKey(to=MyUser, on_delete=CASCADE)
-#     type = models.CharField(max_length=8, null=True, blank=False, choices=(('Seller', 'Seller'), ('Buyer', 'Buyer')))
-#
-#     # def __str__(self):
-#     #     return self.user
-
-
 class Location(models.Model):
     user = models.ForeignKey(to=MyUser, on_delete=CASCADE, null=True, blank=False)
     phone = models.CharField(validators=[RegexValidator("^[6-9]{1}\d{9}$")], max_length=15)
@@ -35,37 +27,17 @@ class Location(models.Model):
         return "%s(%s, %s, %s - %s)" % (self.user, self.address, self.city, self.state, self.state)
 
 
-# class BuyerProfile(models.Model):
-#     userType = models.OneToOneField(to=UserType, on_delete=CASCADE)
-#     gender = models.CharField(null=True, blank=True, max_length=6, choices=(('m', 'male'), ('f', 'female')))
-#     address = models.ForeignKey(to=Location, on_delete=CASCADE, blank=True, null=True)
-#
-#
-# class SellerProfile(models.Model):
-#     userType = models.OneToOneField(to=UserType, on_delete=CASCADE)
-#     store = models.CharField(max_length=100, null=True, blank=True)
-#     address = models.ForeignKey(to=Location, on_delete=CASCADE, null=True, blank=True)
-
-
-class Review(models.Model):
-    user = models.ForeignKey(to=MyUser, on_delete=CASCADE)
-    rating = models.FloatField(validators=(MaxValueValidator(5), MinValueValidator(1)))
-    comments = models.TextField()
-
-    def __str__(self):
-        return "%s - %s" % (self.user, self.rating)
-
-
 class Product(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
     brand = models.CharField(max_length=45)
-    price = models.FloatField()
-    in_stock = models.IntegerField()
+    price = models.FloatField(validators=(MinValueValidator(99), MaxValueValidator(9999999)))
+    in_stock = models.IntegerField(default=0)
     color = models.CharField(max_length=45)
-    size = models.CharField(max_length=5)
+    size = models.CharField(max_length=5, choices=(('XL', 'XL'), ('L', 'L'), ('XXL', 'XXL'), ('M', 'M'), ('S', 'S')))
     image = models.ImageField(upload_to='uploads/%Y/%M/%D')
     created_date = models.DateTimeField(auto_now_add=True)
+    added_by = models.ForeignKey(to=MyUser, on_delete=PROTECT)
 
     def __str__(self):
         return f"{self.name}(price : {self.price}, brand: {self.brand}, in-stock : {self.in_stock})"
@@ -74,16 +46,16 @@ class Product(models.Model):
 class Review(models.Model):
     product = models.ForeignKey(to=Product, on_delete=CASCADE)
     user = models.ForeignKey(to=MyUser, on_delete=CASCADE)
-    rating = models.FloatField(validators=(MaxValueValidator(5), MinValueValidator(1)))
+    rating = models.FloatField(validators=(MinValueValidator(1), MaxValueValidator(5)))
     comments = models.TextField()
 
     def __str__(self):
-        return "%s - %s" % (self.user, self.rating)
+        return "%s - %s - %s" % (self.product, self.user, self.rating)
 
 
 class Cart(models.Model):
-    user = models.ForeignKey(to=MyUser, on_delete=CASCADE)
-    product = models.ForeignKey(to=Product, on_delete=CASCADE)
+    user = models.ForeignKey(to=MyUser, on_delete=PROTECT)
+    product = models.ForeignKey(to=Product, on_delete=PROTECT)
     quantity = models.IntegerField(default=1)
     is_purchased = models.BooleanField(default=False)
 
@@ -92,7 +64,7 @@ class Cart(models.Model):
 
 
 class Order(models.Model):
-    ordered_by = models.CharField(max_length=200)
+    ordered_by = models.ForeignKey(to=MyUser, on_delete=PROTECT)
     ordered_items = models.JSONField()
     total_price = models.FloatField()
     billing_address = models.TextField()
