@@ -1,12 +1,21 @@
+from django.contrib.auth.models import Group
 from rest_framework import serializers
 
-from product.models import *
+from product.models import Product, MyUser, Location, Cart, Order, OrderHistory, Review
 
 
-class MyUserSerializer(serializers.HyperlinkedModelSerializer):
+class GroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Group
+        fields = ('name',)
+
+
+class MyUserSerializer(serializers.ModelSerializer):
+    groups = GroupSerializer(many=True)
+
     class Meta:
         model = MyUser
-        fields = "__all__"
+        fields = ['first_name', 'last_name', 'email', 'is_active', 'groups']
 
 
 class ProductSerializer(serializers.HyperlinkedModelSerializer):
@@ -30,10 +39,13 @@ class LocationSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class CartSerializer(serializers.HyperlinkedModelSerializer):
+class CartSerializer(serializers.ModelSerializer):
+    product = ProductSerializer()
+    user = MyUserSerializer()
+
     class Meta:
         model = Cart
-        fields = "__all__"
+        fields = ['id', 'quantity', 'is_purchased', 'user', 'product']
 
 
 class OrderSerializer(serializers.HyperlinkedModelSerializer):
