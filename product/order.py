@@ -28,6 +28,11 @@ def get_product_price(pk: int) -> float:
     return prod_obj.price
 
 
+def get_cart_items(request) -> dict:
+    cart_items = Cart.objects.filter(user=request.user).values()
+    return cart_items
+
+
 def calculate_products_price_in_cart(request) -> list:
     cart_items = get_cart_items(request)
     price_of_products_in_carts = []
@@ -62,7 +67,7 @@ def insert_order_data_into_db(request):
     }
     try:
         order_obj = Order.objects.create(**data)
-        print(order_obj)
+        # print(order_obj)
         if order_obj:
             return 1
         else:

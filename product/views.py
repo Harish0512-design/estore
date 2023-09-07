@@ -3,10 +3,10 @@ from rest_framework import permissions, status
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from product.custom_permissions import IsSeller, IsBuyer
+from .order import insert_order_data_into_db
 from product.models import Product, MyUser, Location, Cart, Order
 from product.myserializer import ProductSerializer, LocationSerializer, CartSerializer, MyUserSerializer, \
     OrderSerializer
-from .order import insert_order_data_into_db
 
 
 # Create your views here.
