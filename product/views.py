@@ -3,9 +3,10 @@ from rest_framework import permissions, status
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from product.custom_permissions import IsSeller, IsBuyer
-from product.models import Product, MyUser, Location, Cart
-from product.myserializer import ProductSerializer, LocationSerializer, CartSerializer, MyUserSerializer
-from .order import get_cart_items, get_product_price, calculate_products_price_in_cart, calculate_total_price
+from product.models import Product, MyUser, Location, Cart, Order
+from product.myserializer import ProductSerializer, LocationSerializer, CartSerializer, MyUserSerializer, \
+    OrderSerializer
+from .order import insert_order_data_into_db
 
 
 # Create your views here.
@@ -21,7 +22,7 @@ class MyUserViewSet(ModelViewSet):
 
 
 class LocationViewSet(ModelViewSet):
-    permission_classes = [permissions.IsAuthenticated]
+    # permission_classes = [permissions.IsAuthenticated]
     queryset = Location.objects.all()
     serializer_class = LocationSerializer
 
@@ -36,17 +37,14 @@ class CartViewSet(ModelViewSet):
 
 
 @api_view(['GET', 'POST'])
-def order_now_api(request):
+def order_now(request):
     if request.method == 'GET':
-        products = calculate_products_price_in_cart(request)
-        total_price = calculate_total_price(request)
-        user = request.user
-        return Response({'products': products, 'total price': total_price, 'order_by': user},
-                        status=status.HTTP_200_OK)
-    # elif request.method == 'POST':
-    #     serializer = DeliveryAddressSerializer(data=request.data)
-    #     if serializer.is_valid():
-    #         ordered_items = calculate_products_price_in_cart(request)
-    #         total_price = calculate_total_price(request)
-    #         ordered_by = request.user
-    #         delivery_address = serializer.data.get('delivery_address')
+        orders = Order.objects.all()
+        serializer = OrderSerializer(orders, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    elif request.method == "POST":
+        result = insert_order_data_into_db(request)
+        # print(result)
+        if result == 1:
+            return Response({'response': 'order placed successfully'}, status=status.HTTP_200_OK)
+        return Response({'delivery_address': 'This field is mandatory'}, status=status.HTTP_400_BAD_REQUEST)

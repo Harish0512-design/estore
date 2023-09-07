@@ -31,9 +31,6 @@ class ReviewSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class LocationSerializer(serializers.ModelSerializer):
-    # user = serializers.HyperlinkedRelatedField(view_name='MyUserView', queryset=MyUser.objects.all(),
-    #                                            lookup_field='pk')
-
     class Meta:
         model = Location
         fields = "__all__"
@@ -45,19 +42,25 @@ class CartSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Cart
-        fields = ['id', 'quantity', 'is_purchased', 'user', 'product']
+        fields = ['id', 'quantity', 'is_purchased', 'user', 'product', 'added_by']
 
 
-class OrderSerializer(serializers.HyperlinkedModelSerializer):
+class OrderSerializer(serializers.ModelSerializer):
+    ordered_by = MyUserSerializer(many=True)
+    delivery_address = LocationSerializer()
+
     class Meta:
         model = Order
         fields = "__all__"
+
+
+class OrderSerializerIn(serializers.Serializer):
+    class Meta:
+        model = Order
+        fields = ('delivery_address',)
 
 
 class OrderHistorySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = OrderHistory
         fields = "__all__"
-
-# class DeliveryAddressSerializer(serializers.Serializer):
-#     delivery_address = serializers.PrimaryKeyRelatedField()

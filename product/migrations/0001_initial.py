@@ -75,18 +75,6 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
-            name='Order',
-            fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('ordered_items', models.JSONField()),
-                ('total_price', models.FloatField()),
-                ('billing_address', models.TextField()),
-                ('delivery_address', models.TextField()),
-                ('ordered_date', models.DateTimeField(auto_now_add=True)),
-                ('ordered_by', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to=settings.AUTH_USER_MODEL)),
-            ],
-        ),
-        migrations.CreateModel(
             name='Location',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
