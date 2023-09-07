@@ -21,7 +21,7 @@ class MyUserSerializer(serializers.ModelSerializer):
 class ProductSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Product
-        fields = "__all__"
+        exclude = ('added_by',)
 
 
 class ReviewSerializer(serializers.HyperlinkedModelSerializer):
@@ -49,21 +49,17 @@ class OrderSerializer(serializers.ModelSerializer):
     ordered_by = MyUserSerializer(many=True)
     delivery_address = LocationSerializer()
 
+
+class OrderSerializer(serializers.ModelSerializer):
+    ordered_by = MyUserSerializer(many=True)
+    delivery_address = LocationSerializer()
+
     class Meta:
         model = Order
         fields = "__all__"
-
-
-class OrderSerializerIn(serializers.Serializer):
-    class Meta:
-        model = Order
-        fields = ('delivery_address',)
 
 
 class OrderHistorySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = OrderHistory
         fields = "__all__"
-
-# class DeliveryAddressSerializer(serializers.Serializer):
-#     delivery_address = serializers.PrimaryKeyRelatedField()
