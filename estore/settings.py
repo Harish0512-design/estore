@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'authemail',
-    'django_seed'
+    'django_seed',
+    'django_extensions'
 ]
 # for authentication
 AUTH_USER_MODEL = 'product.MyUser'

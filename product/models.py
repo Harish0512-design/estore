@@ -67,8 +67,7 @@ class Order(models.Model):
     ordered_by = models.ForeignKey(to=MyUser, on_delete=PROTECT)
     ordered_items = models.JSONField()
     total_price = models.FloatField()
-    billing_address = models.TextField()
-    delivery_address = models.TextField()
+    delivery_address = models.ForeignKey(to=Location, on_delete=PROTECT)
     ordered_date = models.DateTimeField(auto_now_add=True)
 
 
