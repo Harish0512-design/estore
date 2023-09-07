@@ -58,7 +58,6 @@ class Migration(migrations.Migration):
         ),
         migrations.CreateModel(
             name='Review',
-<<<<<<< HEAD
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('rating', models.FloatField(validators=[django.core.validators.MinValueValidator(1), django.core.validators.MaxValueValidator(5)])),
@@ -69,11 +68,6 @@ class Migration(migrations.Migration):
         ),
         migrations.CreateModel(
             name='OrderHistory',
-            fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('order', models.JSONField()),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to=settings.AUTH_USER_MODEL)),
-=======
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('rating', models.FloatField(validators=[django.core.validators.MinValueValidator(1), django.core.validators.MaxValueValidator(5)])),
@@ -100,7 +94,6 @@ class Migration(migrations.Migration):
                 ('delivery_address', models.TextField()),
                 ('ordered_date', models.DateTimeField(auto_now_add=True)),
                 ('ordered_by', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to=settings.AUTH_USER_MODEL)),
->>>>>>> ce1545c27071a0cf959b8a8eaf1dd54e7dffafcc
             ],
         ),
         migrations.CreateModel(

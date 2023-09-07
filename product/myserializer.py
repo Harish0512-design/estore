@@ -21,7 +21,7 @@ class MyUserSerializer(serializers.ModelSerializer):
 class ProductSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Product
-        fields = "__all__"
+        exclude = ('added_by',)
 
 
 class ReviewSerializer(serializers.HyperlinkedModelSerializer):
@@ -42,7 +42,7 @@ class CartSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Cart
-        fields = ['id', 'quantity', 'is_purchased', 'user', 'product', 'added_by']
+        fields = ['id', 'quantity', 'is_purchased', 'user', 'product']
 
 
 class OrderSerializer(serializers.ModelSerializer):
@@ -64,6 +64,3 @@ class OrderHistorySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = OrderHistory
         fields = "__all__"
-
-# class DeliveryAddressSerializer(serializers.Serializer):
-#     delivery_address = serializers.PrimaryKeyRelatedField()

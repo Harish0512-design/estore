@@ -15,6 +15,10 @@ class ProductViewSet(ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
 
+    def perform_create(self, serializer):
+        serializer.save(added_by=self.request.user)
+
+
 
 class MyUserViewSet(ModelViewSet):
     queryset = MyUser.objects.all()
