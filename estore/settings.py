@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'authemail',
     'django_seed',
-    'django_extensions'
+    'django_extensions',
+    'rest_framework_swagger',
 ]
 # for authentication
 AUTH_USER_MODEL = 'product.MyUser'
@@ -69,7 +70,11 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+            'libraries': {
+                'staticfiles': 'django.templatetags.static',
+            }
         },
+
     },
 ]
 
@@ -130,7 +135,8 @@ MEDIA_ROOT = BASE_DIR / 'media'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
-    )
+    ),
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'
 }
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -141,3 +147,11 @@ EMAIL_HOST_USER = 'collegecirculars123@gmail.com'
 EMAIL_HOST_PASSWORD = 'gobu inso axnu aspb'
 EMAIL_FROM = 'collegecirculars123@gmail.com'
 EMAIL_BCC = 'harishsomsole@gmail.com'
+
+# Celery configuration
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+

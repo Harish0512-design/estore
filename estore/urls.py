@@ -18,10 +18,14 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import RedirectView
+from rest_framework_swagger.views import get_swagger_view
 
 from estore import settings
 
+schema_view = get_swagger_view(title='E-store API', url='product/')
+
 urlpatterns = [
+                  path('docs/', schema_view),
                   path('admin/', admin.site.urls),
                   path('product/', include('product.urls')),
                   path('api/accounts/', include('authemail.urls')),

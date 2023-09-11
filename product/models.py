@@ -68,6 +68,7 @@ class Order(models.Model):
     ordered_items = models.JSONField()
     total_price = models.FloatField()
     delivery_address = models.ForeignKey(to=Location, on_delete=PROTECT)
+    status = models.CharField(default='ordered', max_length=25)
     ordered_date = models.DateTimeField(auto_now_add=True)
 
 

@@ -42,16 +42,15 @@ class CartSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Cart
-        fields = ['id', 'quantity', 'is_purchased', 'user', 'product', 'added_by']
+        fields = ['product', 'quantity', 'is_purchased', 'user']
 
 
-class OrderSerializer(serializers.ModelSerializer):
-    ordered_by = MyUserSerializer(many=True)
-    delivery_address = LocationSerializer()
+class OrderSerializerIn(serializers.Serializer):
+    delivery_address = serializers.IntegerField()
 
-
-class OrderSerializer(serializers.ModelSerializer):
-    ordered_by = MyUserSerializer(many=True)
+    
+class OrderSerializerOut(serializers.ModelSerializer):
+    ordered_by = MyUserSerializer()
     delivery_address = LocationSerializer()
 
     class Meta:

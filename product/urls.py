@@ -10,6 +10,5 @@ router.register(r'users', MyUserViewSet)
 router.register(r'carts', CartViewSet)
 urlpatterns = [
     path('api/', include(router.urls)),
-    path('api/accounts/', include('authemail.urls')),
-    path('api/order-now', order_now),
+    path('api/order-now/', order_now),
 ]
