@@ -48,14 +48,10 @@ class CartSerializer(serializers.ModelSerializer):
 class OrderSerializerIn(serializers.Serializer):
     delivery_address = serializers.IntegerField()
 
-    
+
 class OrderSerializerOut(serializers.ModelSerializer):
     ordered_by = MyUserSerializer()
     delivery_address = LocationSerializer()
-
-    class Meta:
-        model = Order
-        fields = "__all__"
 
 
 class OrderHistorySerializer(serializers.HyperlinkedModelSerializer):
