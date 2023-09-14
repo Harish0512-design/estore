@@ -6,9 +6,9 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from product.custom_permissions import IsSeller, IsBuyer
 from .order import insert_order_data_into_db
-from product.models import Product, MyUser, Location, Cart, Order
+from product.models import Product, MyUser, Location, Cart, Order, Review
 from product.myserializer import ProductSerializer, LocationSerializer, CartSerializer, MyUserSerializer, \
-    OrderSerializerOut, OrderSerializerIn
+    OrderSerializerOut, OrderSerializerIn, ReviewSerializer
 
 
 # Create your views here.
@@ -58,3 +58,9 @@ def order_now(request: Request) -> Response:
             elif result == 0:
                 return Response({'response': 'Invalid delivery address'}, status=status.HTTP_406_NOT_ACCEPTABLE)
         return Response({'delivery_address': 'This field is mandatory'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ReviewViewSet(ModelViewSet):
+    permission_classes = [permissions.IsAuthenticated, IsBuyer]
+    queryset = Review.objects.all().order_by('-id')
+    serializer_class = ReviewSerializer
